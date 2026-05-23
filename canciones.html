@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRO_SONORO_DECRYPTED</title>
+    <style>
+        body {
+            background-color: #000;
+            background-image: radial-gradient(circle, #001100 0%, #000000 100%);
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Efecto pantalla antigua */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        h1 {
+            text-shadow: 0 0 10px #00ff00;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #00ffff;
+            text-shadow: 0 0 8px #00ffff;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .playlist-container {
+            width: 100%;
+            max-width: 750px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* CONTENEDOR INDIVIDUAL DE LA CANCIÓN */
+        .track-box {
+            background-color: rgba(0, 15, 5, 0.9);
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .track-box:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+        }
+
+        /* PARTE SUPERIOR: IMAGEN + LINK */
+        .track-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Estilo de la imagen */
+        .track-img {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #00ff00;
+            border-radius: 6px;
+            object-fit: cover;
+            box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+        }
+
+        .track-info {
+            flex-grow: 1;
+        }
+
+        .track-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            margin-bottom: 2px;
+        }
+
+        .track-artist {
+            font-size: 0.9rem;
+            color: #00ff00;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .btn-play {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: transparent;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-play:hover {
+            background-color: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px #00ffff;
+        }
+
+        /* PARTE INFERIOR: SIGNIFICADO */
+        .track-meaning {
+            background-color: rgba(0, 0, 0, 0.6);
+            border-left: 3px solid #00ff00;
+            padding: 12px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #e0e0e0;
+        }
+
+        .track-meaning span {
+            color: #00ff00;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .btn-volver {
+            margin-top: 20px;
+            color: #ff0055;
+            border: 1px solid #ff0055;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            background-color: #ff0055;
+            color: #000;
+            box-shadow: 0 0 20px #ff0055;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>[ REGISTRO_DE_BANDAS_SONORAS ]</h1>
+    <div class="subtitle">> Archivos multimedia y significados encriptados.</div>
+
+    <div class="playlist-container">
+
+        <!-- CANCIÓN 1 -->
+        <div class="track-box">
+            <div class="track-header">
+                <!-- Cambia "imagen1.jpg" por el nombre de tu foto -->
+                <img src="imagenes/a.jpg" alt="Cover" class="track-img">
+                <div class="track-info">
+                    <div class="track-title">Join Me In Death</div>
+                    <div class="track-artist">Artista 1</div>
+                    <a href="https://www.youtube.com/watch?v=1V4AscLidWg&list=RDGMEM_v2KDBP3d4f8uT-ilrs8fQVM1V4AscLidWg&start_radio=1" target="_blank" class="btn-play">▶ ESCUCHAR </a>
+                </div>
+            </div>
+            <div class="track-meaning">
+                <span>// SIGNIFICADO_SISTEMA:</span>
+               Siempre me acuerdo de las veces que me decías que te gustaba esta canción, y cada vez que la escucho siempre me recuerda a ti; al final, termino escuchándola pensando en ti.
+            </div>
+        </div>
+
+        <!-- CANCIÓN 2 -->
+        <div class="track-box">
+            <div class="track-header">
+                <img src="imagenes/b.png" alt="Cover" class="track-img">
+                <div class="track-info">
+                    <div class="track-title"> Enamorado tuyo </div>
+                    <div class="track-artist">Artista 2</div>
+                    <a href="https://www.youtube.com/watch?v=R5cbxTPZNL0&list=RDUPVfQKUHTSc&index=4" target="_blank" class="btn-play">▶ ESCUCHAR</a>
+                </div>
+            </div>
+            <div class="track-meaning">
+                <span>// SIGNIFICADO_SISTEMA:</span>
+               Que, por más que parezca que no me gustas, no me sale. Al final, siempre te pienso; ya te necesito y, por más que quiera borrarte de mi mente, no puedo. Por más que quiera disimular, no me queda no quererte.
+
+            </div>
+        </div>
+
+        <!-- CANCIÓN 3 -->
+        <div class="track-box">
+            <div class="track-header">
+                <img src="imagenes/c1.jpg" alt="Cover" class="track-img">
+                <div class="track-info">
+                    <div class="track-title">
+Frances Limon</div>
+                    <div class="track-artist">Artista 3</div>
+                    <a href="https://www.youtube.com/watch?v=jIwX3YozFQ4&list=RDUPVfQKUHTSc&index=3" target="_blank" class="btn-play">▶ ESCUCHAR </a>
+                </div>
+            </div>
+            <div class="track-meaning">
+                <span>// SIGNIFICADO_SISTEMA:</span>
+                Me encanta todo de ti: tu forma de ser, tu forma de querer y hasta tu forma de no querer. Eres la persona con la que siempre había soñado. Cada cosa de ti me emociona, incluso cuando yo a ti no.
+
+            </div>
+        </div>
+
+        <!-- CANCIÓN 4 -->
+        <div class="track-box">
+            <div class="track-header">
+                <img src="imagenes/c.avif" alt="Cover" class="track-img">
+                <div class="track-info">
+                    <div class="track-title">Amor Amarillo</div>
+                    <div class="track-artist">Artista 4</div>
+                    <a href="https://www.youtube.com/watch?v=iluWuweGX7s&list=RDUPVfQKUHTSc&index=8" target="_blank" class="btn-play">▶ ESCUCHAR</a>
+                </div>
+            </div>
+            <div class="track-meaning">
+                <span>// SIGNIFICADO_SISTEMA:</span>
+             No dejaré que seas frío, solo te amaré con todo mi amor. Eres lo más perfecto de este mundo, como lo que siento por ti.
+
+
+            </div>
+        </div>
+
+        <!-- CANCIÓN 5 -->
+        <div class="track-box">
+            <div class="track-header">
+                <img src="imagenes/d.jpg" alt="Cover" class="track-img">
+                <div class="track-info">
+                    <div class="track-title">
+Eres</div>
+                    <div class="track-artist">Artista 5</div>
+                    <a href="https://www.youtube.com/watch?v=6cjUGT6vcfU" target="_blank" class="btn-play">▶ ESCUCHAR </a>
+                </div>
+            </div>
+            <div class="track-meaning">
+                <span>// SIGNIFICADO_SISTEMA:</span>
+                Eres lo que todos los días quiero ver al despertar, mi primer pensamiento del día. Siempre estaré para ti; solo te esperaré, por más años que pasen. Quiero verme reflejada en tus hermosos ojos por primera vez.
+
+            </div>
+        </div>
+
+    </div>
+
+    <a href="inicio2.html" class="btn-volver">< VOLVER AL MENÚ</a>
+
+</body>
+</html>

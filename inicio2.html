@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S1ST3M4_PR1NC1P4L</title>
+    <style>
+        /* Mantenemos la estética hacker pero adaptada a un catálogo */
+        body {
+            background-color: #000;
+            background-image: radial-gradient(circle, #001100 0%, #000000 100%);
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Efecto de pantalla antigua */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        h1 {
+            text-align: center;
+            text-shadow: 0 0 10px #00ff00;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: #00ffff;
+            text-shadow: 0 0 8px #00ffff;
+            margin-bottom: 40px;
+            font-size: 1rem;
+        }
+
+        /* CONTENEDOR DEL CATÁLOGO */
+        .catalogo-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* TARJETAS / BOTONES DEL CATÁLOGO */
+        .modulo-card {
+            background-color: rgba(0, 20, 5, 0.85);
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            color: #00ff00;
+        }
+
+        /* Animación cuando pasa el mouse por encima */
+        .modulo-card:hover {
+            transform: translateY(-8px);
+            background-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 30px #00ff00;
+            font-weight: bold;
+        }
+
+        .modulo-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+        }
+
+        .modulo-card p {
+            font-size: 0.9rem;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        /* Detalles extras decorativos */
+        .decoracion {
+            margin-top: auto;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            text-align: center;
+            padding-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>[ BASE_DE_DATOS_DESBLOQUEADA ]</h1>
+    <div class="subtitle">> Bienvenido. Selecciona un módulo para ejecutar...</div>
+
+    <!-- AQUÍ ESTÁ TU CATÁLOGO -->
+    <div class="catalogo-container">
+
+        <!-- Opción 1: Canciones -->
+        <a href="canciones.html" class="modulo-card">
+            <h2>🎵 CANCIONES</h2>
+            <p>Acceder al registro de bandas sonoras compartidas.</p>
+        </a>
+
+        <!-- Opción 2: Minijuego -->
+        <a href="juego.html" class="modulo-card">
+            <h2>🎮 MINIJUEGO</h2>
+            <p>Iniciar protocolo de entretenimiento encriptado.</p>
+        </a>
+
+        <!-- Opción 3: Tarrito -->
+        <a href="tarro.html" class="modulo-card">
+            <h2> COFRE </h2>
+            <p>Alerta: Contenido clasificado de alta prioridad.</p>
+        </a>
+
+    </div>
+
+    <div class="decoracion">
+        SISTEMA OPERATIVO  v4.0 // ACCESO TOTAL CONCEDIDO
+    </div>
+
+</body>
+</html>

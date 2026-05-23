@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAWAII_CAT_RUNNER</title>
+    <style>
+        body {
+            background-color: #0b071e;
+            /* Fondo degradado mágico y coquette */
+            background-image: linear-gradient(to bottom, #160f30, #0b071e);
+            color: #ff94c2;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+            touch-action: manipulation; 
+        }
+
+        h1 {
+            text-shadow: 0 0 10px #ff94c2;
+            font-size: 1.4rem;
+            margin: 5px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .instrucciones {
+            color: #b39ddb;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #gameContainer {
+            position: relative;
+            border: 3px solid #ff94c2;
+            box-shadow: 0 0 25px rgba(255, 148, 194, 0.4);
+            border-radius: 12px;
+            background-color: #050505;
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 16 / 9;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        #victoryScreen {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 10, 30, 0.95);
+            color: #fff;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .victory-title {
+            color: #ff94c2;
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-shadow: 0 0 15px #ff94c2;
+            margin-bottom: 10px;
+        }
+
+        .victory-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #e1bee7;
+            max-width: 450px;
+            border: 1px dashed #ff94c2;
+            padding: 12px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow-y: auto;
+            max-height: 140px;
+        }
+
+        .btn-volver {
+            margin-top: 15px;
+            display: inline-block;
+            color: #fff;
+            background-color: #ff94c2;
+            padding: 8px 18px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px #ff94c2;
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            box-shadow: 0 0 20px #ff94c2;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <h1> CAT HEART RUNNER </h1>
+    <div class="instrucciones">> PC: Espacio o ↑ / CELULAR: Toca la pantalla para saltar</div>
+
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="600" height="337"></canvas>
+
+        <div id="victoryScreen">
+            <div class="victory-title"> ¡NIVEL COMPLETADO! </div>
+            <div class="victory-text">
+                ¡Eres el más pro!  El gatito recolectó todos tus corazones.<br><br>
+                "¡Feliz cumpleaños, amigo lindo! Lograste superar el minijuego del sistema con éxito. Así como el gatito esquivó cada árbol y atrapó los corazones, deseo que en este nuevo año superes cualquier obstáculo y llenes tu vida de cosas hermosas. ¡Gracias por ser un amigo tan bueno!"
+            </div>
+            <a href="inicio2.html" class="btn-volver">Volver al Menú</a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const victoryScreen = document.getElementById("victoryScreen");
+
+        let gameActive = true;
+        let score = 0;
+        const targetScore = 12; // Junta 12 corazones para ganar
+        let gameSpeed = 4.5;
+        const gravity = 0.55;
+        const groundY = 270;
+
+        // ESTRELLAS PARA EL FONDO HERMOSO
+        let stars = [];
+        for (let i = 0; i < 30; i++) {
+            stars.push({ x: Math.random() * 600, y: Math.random() * 180, size: Math.random() * 2 + 1 });
+        }
+        
+        // EL GATITO LINDO
+        const player = {
+            x: 60,
+            y: 225,
+            width: 35,
+            height: 35,
+            velY: 0,
+            jumpForce: -10.5,
+            grounded: false
+        };
+
+        let obstacles = [];
+        let hearts = [];
+        let spawnTimer = 0;
+
+        // CONTROLES
+        window.addEventListener("keydown", (e) => {
+            if ((e.key === " " || e.key === "ArrowUp") && player.grounded && gameActive) jump();
+        });
+
+        document.getElementById("gameContainer").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            if (player.grounded && gameActive) jump();
+        }, { passive: false });
+
+        function jump() {
+            player.velY = player.jumpForce;
+            player.grounded = false;
+        }
+
+        // DIBUJAR UN ÁRBOL LINDO ESTILO ANIMAL CROSSING / RETRO
+        function drawTree(x, y, w, h) {
+            // Tronco
+            ctx.fillStyle = "#8d6e63";
+            ctx.fillRect(x + w/3, y + h/2, w/3, h/2);
+
+            // Copa del árbol (Hojas redondas aesthetics)
+            ctx.fillStyle = "#4caf50";
+            ctx.beginPath();
+            ctx.arc(x + w/2, y + h/3, w/2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = "#81c784"; // Brillo superior del árbol
+            ctx.beginPath();
+            ctx.arc(x + w/2 - 4, y + h/3 - 4, w/3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // DIBUJAR UN CORAZÓN ROSADO HERMOSO
+        function drawHeart(x, y, size) {
+            ctx.fillStyle = "#ff69b4";
+            ctx.beginPath();
+            ctx.moveTo(x, y + size/4);
+            ctx.bezierCurveTo(x, y, x - size/2, y, x - size/2, y + size/2);
+            ctx.bezierCurveTo(x - size/2, y + size*0.75, x, y + size, x, y + size);
+            ctx.bezierCurveTo(x, y + size*0.75, x + size/2, y + size/2, x + size/2, y + size);
+            ctx.bezierCurveTo(x + size/2, y, x, y, x, y + size/4);
+            ctx.fill();
+        }
+
+        // DIBUJAR AL GATITO
+        function drawCat(x, y, w, h) {
+            // Cuerpo/Cabeza principal (Gatito Gris/Blanco tierno)
+            ctx.fillStyle = "#e0e0e0";
+            ctx.fillRect(x, y + 8, w, h - 8); // Cuerpo
+            ctx.fillRect(x + 4, y, w - 8, 12); // Cabeza
+
+            // Orejitas
+            ctx.fillStyle = "#b0bec5";
+            ctx.beginPath();
+            ctx.moveTo(x + 4, y); ctx.lineTo(x + 10, y - 8); ctx.lineTo(x + 14, y); ctx.fill(); // Izq
+            ctx.moveTo(x + w - 14, y); ctx.lineTo(x + w - 10, y - 8); ctx.lineTo(x + w - 4, y); ctx.fill(); // Der
+            
+            // Centro rosa de las orejas
+            ctx.fillStyle = "#ffb74d"; ctx.fillStyle = "#ff8a80";
+            ctx.beginPath();
+            ctx.moveTo(x + 6, y); ctx.lineTo(x + 10, y - 5); ctx.lineTo(x + 12, y); ctx.fill();
+            ctx.moveTo(x + w - 12, y); ctx.lineTo(x + w - 10, y - 5); ctx.lineTo(x + w - 6, y); ctx.fill();
+
+            // Ojitos tiernos cerrados de felicidad o abiertos
+            ctx.fillStyle = "#212121";
+            ctx.fillRect(x + 10, y + 5, 3, 3);
+            ctx.fillRect(x + w - 13, y + 5, 3, 3);
+
+            // Naricita rosa
+            ctx.fillStyle = "#ff8a80";
+            ctx.fillRect(x + w/2 - 1.5, y + 8, 3, 2);
+
+            // Cola feliz del gatito hacia arriba
+            ctx.fillStyle = "#e0e0e0";
+            ctx.fillRect(x - 6, y + h - 18, 6, 4);
+            ctx.fillRect(x - 6, y + h - 24, 4, 8);
+        }
+
+        function spawnElements() {
+            spawnTimer++;
+            if (spawnTimer > 85) {
+                spawnTimer = 0;
+                
+                // Tamaño del árbol lindo
+                let treeWidth = 35;
+                let treeHeight = Math.random() * 20 + 45; // Árboles de tamaños variados
+                
+                obstacles.push({
+                    x: canvas.width,
+                    y: groundY - treeHeight,
+                    width: treeWidth,
+                    height: treeHeight
+                });
+
+                // Corazón flotando
+                hearts.push({
+                    x: canvas.width + 8,
+                    y: groundY - treeHeight - 40,
+                    size: 16,
+                    collected: false
+                });
+            }
+        }
+
+        function update() {
+            if (!gameActive) return;
+
+            // Limpiar y poner fondo degradado hermoso
+            let skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            skyGradient.addColorStop(0, "#2c1654");
+            skyGradient.addColorStop(0.6, "#12072b");
+            skyGradient.addColorStop(1, "#050212");
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar Estrellas del fondo
+            ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+            stars.forEach(star => {
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+            });
+
+            // Dibujar el Suelo Hermoso (Morado Pastel / Coquette)
+            ctx.fillStyle = "#7e57c2";
+            ctx.fillRect(0, groundY, canvas.width, 8);
+            ctx.fillStyle = "#4527a0";
+            ctx.fillRect(0, groundY + 8, canvas.width, canvas.height - groundY);
+
+            // Físicas del Gatito jugador
+            player.velY += gravity;
+            player.y += player.velY;
+
+            if (player.y >= groundY - player.height) {
+                player.y = groundY - player.height;
+                player.velY = 0;
+                player.grounded = true;
+            }
+
+            // Dibujar Gatito
+            drawCat(player.x, player.y, player.width, player.height);
+
+            spawnElements();
+
+            // Mover y Dibujar Árboles
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let tree = obstacles[i];
+                tree.x -= gameSpeed;
+
+                drawTree(tree.x, tree.y, tree.width, tree.height);
+
+                // Colisión con Árbol (Se reinicia el puntaje)
+                if (player.x < tree.x + tree.width && player.x + player.width > tree.x &&
+                    player.y < tree.y + tree.height && player.y + player.height > tree.y) {
+                    score = 0; 
+                    obstacles = [];
+                    hearts = [];
+                    break;
+                }
+
+                if (tree.x + tree.width < 0) obstacles.splice(i, 1);
+            }
+
+            // Mover y Dibujar Corazones
+            for (let i = hearts.length - 1; i >= 0; i--) {
+                let heart = hearts[i];
+                heart.x -= gameSpeed;
+
+                if (!heart.collected) {
+                    drawHeart(heart.x, heart.y, heart.size);
+
+                    // Colisión para recolectar Corazón
+                    if (player.x < heart.x + heart.size/2 && player.x + player.width > heart.x - heart.size/2 &&
+                        player.y < heart.y + heart.size && player.y + player.height > heart.y) {
+                        heart.collected = true;
+                        score++;
+                        
+                        if (score >= targetScore) {
+                            gameActive = false;
+                            victoryScreen.style.display = "flex";
+                        }
+                    }
+                }
+
+                if (heart.x + heart.size < 0) hearts.splice(i, 1);
+            }
+
+            // Marcador de corazones hermoso en pantalla
+            ctx.fillStyle = "#ff94c2";
+            ctx.font = "bold 14px 'Courier New'";
+            ctx.fillText(` HEARTS: ${score}/${targetScore}`, 20, 30);
+
+            gameSpeed = 4.5 + (score * 0.08);
+
+            requestAnimationFrame(update);
+        }
+
+        update();
+    </script>
+</body>
+</html>

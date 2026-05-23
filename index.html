@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="iniciocss">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S1ST3M_CR1T1C4L_H4CK</title>
+    <style>
+        /* Estilo general de Matrix/Hacker */
+        body {
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Contenedor de la consola */
+        .terminal {
+            width: 100%;
+            max-width: 700px;
+            height: 80vh;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.5);
+            background-color: rgba(0, 10, 0, 0.95);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+
+        /* Zona donde corren los textos del hackeo */
+        .log-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 5px;
+        }
+
+        /* Estilo de las líneas de código */
+        .log-line {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .danger {
+            color: #ff0055;
+            font-weight: bold;
+            text-shadow: 0 0 8px #ff0055;
+        }
+
+        .success {
+            color: #00ffff;
+        }
+
+        /* Botón Oculto que aparecerá con estilo */
+        .btn-container {
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease-in-out;
+            height: 50px;
+        }
+
+        .btn-container.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .btn-iniciar {
+            display: inline-block;
+            padding: 12px 35px;
+            background-color: transparent;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            font-size: 1.3rem;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 0 10px #00ff00;
+            border-radius: 4px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .btn-iniciar:hover {
+            background-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 30px #00ff00;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #00ff00; }
+            50% { box-shadow: 0 0 25px #00ff00; }
+            100% { box-shadow: 0 0 10px #00ff00; }
+        }
+
+        /* Ocultar barra de scroll para estética limpia */
+        .log-container::-webkit-scrollbar {
+            width: 3px;
+        }
+        .log-container::-webkit-scrollbar-thumb {
+            background-color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <div class="log-container" id="logContainer">
+            <!-- Las líneas de hackeo se generarán aquí automáticamente -->
+        </div>
+        
+        <div class="btn-container" id="btnContainer">
+            <a href="inicio2.html" class="btn-iniciar">> ACCEDER AL SISTEMA <</a>
+        </div>
+    </div>
+
+    <script>
+        // Todas las frases del show de hackeo
+        const hackLines = [
+            "> INICIANDO PROTOCOLO DE INTRUSIÓN...",
+            "> Conectando con servidor remoto proxy local...",
+            "> [INFO] IP detectada: 192.168.1.105 (Buscando objetivo...)",
+            "> Bypassing firewall... ████████████ 35%",
+            "> Descifrando paquetes de datos confidenciales...",
+            "> CRITICAL ALERT: Cortafuegos del sistema vulnerado.",
+            "> [PROCESO] Inyectando código malicioso en la base de datos...",
+            "> Descargando archivos secretos... ██████████████████ 68%",
+            "> TRACE ROUTE: Redireccionando señales de satélite...",
+            "> ALERTA: Archivo encriptado de alta prioridad detectado.",
+            "> Desencriptando carpeta: ''...",
+            "> [ALERTA] ¡Nivel de peligro de ternura excedido! ⚠",
+            "> Extrayendo recuerdos, fotos y mensajes especiales...",
+            "> Descarga completa... 100% ██████████████████████████ [OK]",
+            "> ¡SISTEMA HACKEADO CON ÉXITO! ",
+            "> Servidor listo para mostrar la sorpresa..."
+        ];
+
+        const logContainer = document.getElementById('logContainer');
+        const btnContainer = document.getElementById('btnContainer');
+        let lineIndex = 0;
+
+        function typeLine() {
+            if (lineIndex < hackLines.length) {
+                const line = document.createElement('p');
+                line.className = 'log-line';
+                line.textContent = hackLines[lineIndex];
+
+                // Darle colores especiales a ciertas palabras para más drama
+                if (hackLines[lineIndex].includes("ALERTA") || hackLines[lineIndex].includes("CRITICAL")) {
+                    line.classList.add('danger');
+                } else if (hackLines[lineIndex].includes("ÉXITO") || hackLines[lineIndex].includes("[OK]")) {
+                    line.classList.add('success');
+                }
+
+                logContainer.appendChild(line);
+                
+                // Hace que el scroll baje automáticamente solo
+                logContainer.scrollTop = logContainer.scrollHeight;
+                
+                lineIndex++;
+                
+                // Velocidad entre cada línea (en milisegundos)
+                // Unas van más rápido que otras para que parezca real
+                let delay = Math.random() * 400 + 300; 
+                setTimeout(typeLine, delay);
+            } else {
+                // Al terminar todo el texto, aparece el botón con animación
+                btnContainer.classList.add('show');
+            }
+        }
+
+        // Arranca el show un segundo después de cargar la página
+        setTimeout(typeLine, 1000);
+    </script>
+</body>
+</html>
